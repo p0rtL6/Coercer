@@ -249,10 +249,12 @@ def main():
         for target in targets:
             reporter.print_info("Scanning target %s" % target)
             # Checking credentials if any
-            if not "msrpc" in options.filter_transport_name or try_login(credentials, target):
-                # Starting action
-                action_coerce(target, available_methods, options, credentials)
-
+            if not "msrpc" in options.filter_transport_name or try_login(credentials, target, verbose=options.verbose):
+                try:
+                    # Starting action
+                    action_coerce(target, available_methods, options, credentials, reporter)
+                except Exception as e:
+                    reporter.print_error("An unexpected error occurred: %s" % e)
     elif options.mode == "scan":
         reporter.print_info("Starting scan mode")
         if credentials.is_anonymous():
@@ -263,10 +265,12 @@ def main():
             for target in targets:
                 reporter.print_info("Scanning target %s" % target)
                 # Checking credentials if any
-                if not "msrpc" in options.filter_transport_name or try_login(credentials, target):
-                    # Starting action
-                    action_scan(target, available_methods, options, credentials)
-
+                if not "msrpc" in options.filter_transport_name or try_login(credentials, target, verbose=options.verbose):
+                    try:
+                        # Starting action
+                        action_scan(target, available_methods, options, credentials, reporter)
+                    except Exception as e:
+                        reporter.print_error("An unexpected error occurred: %s" % e)
             # Reporting results
             if options.export_json is not None:
                 reporter.exportJSON(options.export_json)
@@ -285,10 +289,12 @@ def main():
             for target in targets:
                 reporter.print_info("Fuzzing target %s" % target)
                 # Checking credentials if any
-                if not "msrpc" in options.filter_transport_name or try_login(credentials, target):
-                    # Starting action
-                    action_fuzz(target, available_methods, options, credentials)
-
+                if not "msrpc" in options.filter_transport_name or try_login(credentials, target, verbose=options.verbose):
+                    try:
+                        # Starting action
+                        action_fuzz(target, available_methods, options, credentials, reporter)
+                    except Exception as e:
+                        reporter.print_error("An unexpected error occurred: %s" % e)
             # Reporting results
             if options.export_json is not None:
                 reporter.exportJSON(options.export_json)
